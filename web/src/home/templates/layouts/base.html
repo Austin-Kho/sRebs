@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- CSRF Token -->
+    <meta name="csrf-token" content="{{ csrf_token }}">
+
+    <title>{% block title %}REBS{% endblock %}</title>
+
+    <!-- Styles -->
+    {% load static %}
+    <link rel="icon" href="{% static 'rebs/favicon.png' %}">
+    <link rel="stylesheet" href="{% static "home/css/app.css" %}">
+    <link rel="stylesheet" href="{% block extrastyle %}{% endblock %}">
+</head>
+<body>
+<div id="app">
+    {% include "layouts/partials/nav/navigation.html" %}
+
+    <main class="py-4">
+        {% block content %}{% endblock %}
+    </main>
+</div>
+
+<!-- Scripts -->
+<script src="{% static 'home/js/app.js' %}"></script>
+<script src="{% block extrajs %}{% endblock %}"></script>
+</body>
+</html>

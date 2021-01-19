@@ -1,0 +1,185 @@
+{% extends 'rebs/layouts/base.html' %}
+
+{% block title %}Rebs - 분양 수납 내역{% endblock %}
+
+{% block content %}
+    {% load static humanize widget_tweaks %}
+
+    <!-- Start Content-->
+    <div class="container-fluid">
+
+        <!-- start page title -->
+        {% include 'rebs/partials/content_title.html' with  second_bs="분양 수납 관리" title="분양 수납 내역" %}
+        <!-- end page title -->
+
+        <div class="row">
+            <form class="form-horizontal p-0 col-12" method="get">
+                <div class="col-lg-12">
+                    <div class="card">
+                        <div class="card-body">
+
+                            {% with menu_order='1' %}
+                                {% include 'rebs_cash/partials/head_menu_payment.html' %}
+                            {% endwith %}
+
+                            <div class="row">
+                                {% include 'rebs/partials/project_select.html' %}
+                                <div class="col-sm-12 col-md-6"></div>
+                            </div>
+                            <div class="row">
+                                {% include 'rebs_cash/partials/payment_summary.html' %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="col-lg-12">
+                    <div class="card">
+                        <div class="card-body pb-1">
+                            <div class="form-row">
+                                <div class="form-group col-md-2">
+                                    <label for="{{ form.sd.id_for_label }}" class="col-form-label">거래 기간</label>
+                                    {{ form.sd|add_class:"form-control"|attr:"placeholder:시작일"|attr:"data-provide=datepicker data-date-format=yyyy-mm-dd data-date-autoclose=true data-toggle=input-mask data-mask-format=0000-00-00" }}
+                                </div>
+                                <div class="form-group col-md-2">
+                                    <label for="{{ form.ed.id_for_label }}"
+                                           class="d-none d-md-block col-form-label">&nbsp;</label>
+                                    {{ form.ed|add_class:"form-control"|attr:"placeholder:종료일"|attr:"data-provide=datepicker data-date-format=yyyy-mm-dd data-date-autoclose=true data-toggle=input-mask data-mask-format=0000-00-00" }}
+                                </div>
+                                <div class="form-group col-md-2">
+                                    <label for="{{ form.ipo.id_for_label }}" class="col-form-label">납입 회차별</label>
+                                    {{ form.ipo|add_class:"form-control" }}
+                                </div>
+                                <div class="form-group col-md-2">
+                                    <label for="{{ form.ba.id_for_label }}" class="col-form-label">수납
+                                        계좌별</label>
+                                    {{ form.ba|add_class:"form-control" }}
+                                </div>
+                                <div class="form-group col-md-2 text-center my-auto">
+                                    <label for="" class="col-form-label badge-success"></label>
+                                    <div class="custom-control custom-switch">
+                                        <input type="checkbox" name="up" class="custom-control-input" id="id_up"
+                                               {% if request.GET.up %}checked{% endif %} onclick="submit()">
+                                        <label class="custom-control-label" for="{{ form.up.id_for_label }}">미등록
+                                            수납대금만 보기</label>
+                                    </div>
+                                </div>
+                                <div class="form-group col-md-2">
+                                    <label for="{{ form.search_word.id_for_label }}"
+                                           class="d-none d-md-block col-form-label">&nbsp;</label>
+                                    <div class="input-group">
+                                        <input name="q" id="id_q" type="text" class="form-control"
+                                               placeholder="검색어 - 계약자, 입급자, 적요, 비고" aria-label="검색어 - 계약자, 입급자, 적요, 비고"
+                                               onclick="this.value=''">
+                                        <div class="input-group-append">
+                                            <input type="submit" class="btn btn-info btn-sm btn-block" value="검색">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-12 table-responsive-md">
+                                    <div class="text-right mb-1 mr-2">
+                                        <a href="{% url 'excel:payments' %}?project={{ this_project.id }}&sd={{ request.GET.sd }}&ed={{ request.GET.ed }}&ipo={{ request.GET.ipo }}&ba={{ request.GET.ba }}&up={{ request.GET.up }}&q={{ request.GET.q }}">
+                                            <i class="mdi mdi-file-excel-box"></i> Excel Export
+                                            <i class="mdi mdi-download ml-1"></i>
+                                        </a>
+                                    </div>
+                                    <table id="scroll-horizontal-datatable"
+                                           class="table table-hover table-centered table-condensed table-sm w-100 m-0 nowrap"
+                                           style="word-break: keep-all;">
+                                        <thead>
+                                        <tr class="bg-nav-pills">
+                                            <th class="text-center" scope="col"><input type="checkbox" disabled></th>
+                                            <th class="text-center" scope="col">거래 일자</th>
+                                            <th class="text-center" scope="col">차수</th>
+                                            <th class="text-center" scope="col">타입</th>
+                                            <th class="text-center" scope="col">계약일련번호</th>
+                                            <th class="text-center" scope="col">계약자</th>
+                                            <th class="text-center" scope="col">수납 금액</th>
+                                            <th class="text-center" scope="col">납입 회차</th>
+                                            <th class="text-center" scope="col">수납 계좌</th>
+                                            <th class="text-center" scope="col">입금자</th>
+                                            <th class="text-center" scope="col">
+                                                <a href="javascript: void(0);" class="action-icon"><i
+                                                        class="mdi mdi-pencil"></i></a>
+                                                <a href="javascript: void(0);" class="action-icon"><i
+                                                        class="mdi mdi-delete"></i></a>
+                                            </th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        {% for payment in object_list %}
+                                            <tr class="{% if not payment.contract %}bg-warning-lighten{% endif %}">
+                                                <th class="text-center" scope="row"><input type="checkbox" disabled>
+                                                </th>
+                                                <td class="text-center">{{ payment.deal_date|date:"Y-m-d" }}</td>
+                                                <td class="text-center">{{ payment.contract.order_group|default:"-" }}</td>
+                                                <td class="text-center">{{ payment.contract.contractunit.unit_type|default:"-" }}</td>
+                                                <td class="text-center">{{ payment.contract.serial_number|default:"-" }}
+                                                </td>
+                                                <td class="text-center">
+                                                    <a href="{% url 'rebs:cash-inout:payment-register' %}?project={{ this_project.id }}&type={{ payment.contract.contractunit.unit_type.id }}&contract={{ payment.contract.id }}&payment_id={{ payment.id }}">
+                                                        {{ payment.contract.contractor.name|default:"계약정보확인" }}
+                                                    </a>
+                                                </td>
+                                                <td class="text-right bg-success-lighten">
+                                                    <a href="{% url 'rebs:cash-inout:payment-register' %}?project={{ this_project.id }}&type={{ payment.contract.contractunit.unit_type.id }}&contract={{ payment.contract.id }}&payment_id={{ payment.id }}">
+                                                        {{ payment.income|floatformat:"0"|intcomma|default:"-" }}
+                                                    </a>
+                                                </td>
+                                                <td class="text-center bg-success-lighten">{{ payment.installment_order|default:"-" }}</td>
+                                                <td class="text-center bg-success-lighten">{{ payment.bank_account }}</td>
+                                                <td class="text-center bg-success-lighten">{{ payment.trader|default:"-" }}</td>
+                                                <td class="text-center">
+                                                    <a href="javascript: void(0);" class="action-icon"><i
+                                                            class="mdi mdi-pencil"></i></a>
+                                                    <a href="javascript: void(0);" class="action-icon"><i
+                                                            class="mdi mdi-delete"></i></a>
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+                            {% if is_paginated %}
+
+                                {# to_first_last :: 맨처음 / 맨끝으로 버튼 사용 여부 #}
+                                {# page_class ex:: pagination-rounded pagination-sm pagination-lg justify-content-center justify-content-end #}
+                                {% include 'partials/pagination.html' with to_first_last="ok" page_class="pagination-rounded justify-content-end" %}
+
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div> <!-- container -->
+
+{% endblock %}
+
+{% block third_party_js %}
+
+    <script>
+      const ipo = document.getElementById('id_ipo')
+      const ba = document.getElementById('id_ba')
+      const q = document.getElementById('id_q')
+
+      window.onload = function () {
+        document.getElementById('id_project_sel').setAttribute('onchange', 'submit()')
+
+        document.getElementById('id_sd').value = '{{ request.GET.sd }}'
+        document.getElementById('id_ed').value = '{{ request.GET.ed }}'
+
+        ipo.value = '{{ request.GET.ipo }}'
+        ba.value = '{{ request.GET.ba }}'
+        q.value = '{{ request.GET.q }}'
+        q.setAttribute('onclick', 'this.value=\'\'')
+      }
+    </script>
+
+{% endblock %}

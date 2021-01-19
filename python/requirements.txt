@@ -1,0 +1,14 @@
+django
+uwsgi
+mysqlclient
+django-widget-tweaks
+django-markdown2
+Pillow
+django-mdeditor
+django-disqus
+django-import-export
+boto3
+django-storages
+django-mathfilters
+xlsxwriter
+WeasyPrint

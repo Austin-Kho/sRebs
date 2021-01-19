@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{% block title %}REBS{% endblock %}</title>
+    <link href='https://fonts.googleapis.com/css?family=Roboto:400,300,700' rel='stylesheet' type='text/css'>
+    {% load static %}
+    <link href="{% static "home/css/app.css" %}" rel="stylesheet" type="text/css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="csrf-token" content="{{ csrf_token }}">
+
+{#        {% include 'layouts/partials/favicons' %}#}
+    <link rel="stylesheet" href="{% block extrastyle %}{% endblock %}">
+</head>
+<body class="layout-default skin-stark">
+{% include "layouts/partials/notifs.html" %}
+
+<div id="app" class="wrapper">
+    {% include "layouts/partials/sidebar.html" %}
+
+    <div id="content">
+        {% include "layouts/partials/header.html" %}
+
+        <div class="main-contents">
+            {% block content %}{% endblock %}
+        </div>
+
+        {% include "layouts/partials/footer.html" %}
+    </div>
+</div>
+
+{% load static %}
+<script src="{% static "home/js/plugins.js" %}"></script>
+<script src="{% static "home/js/app.js" %}"></script>
+<script src="{% block extrajs %}{% endblock %}"></script>
+</body>
+</html>

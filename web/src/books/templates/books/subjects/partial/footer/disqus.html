@@ -1,0 +1,7 @@
+<div class="mt-5">
+    {% if object %}
+        {% load disqus_tags %}
+        {% set_disqus_url post_absolute_url %}
+        {% disqus_show_comments %}
+    {% endif %}
+</div>

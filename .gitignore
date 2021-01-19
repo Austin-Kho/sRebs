@@ -1,0 +1,6 @@
+# mysql data
+mariadb/mysql/
+
+# django
+web/*/__pycache__/
+*/__pycache__

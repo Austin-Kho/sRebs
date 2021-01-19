@@ -1,0 +1,467 @@
+<!-- ========== Left Sidebar Start ========== -->
+
+<div class="left-side-menu">
+
+    {% include 'rebs/partials/logo.html' %}
+
+
+    <div class="h-100" id="left-side-menu-container" data-simplebar>
+
+        <!--- Sidemenu -->
+        <ul class="metismenu side-nav">
+
+            <li class="side-nav-title side-nav-item">Side Menu</li>
+
+            <li class="side-nav-item">
+                <a href="{% url 'rebs:dashboard' %}" class="side-nav-link">
+                    <i class="uil-tachometer-fast"></i>
+                    {#                    <span class="badge badge-success float-right">4</span>#}
+                    <span class="badge badge-pill badge-light-lighten font-10 float-right">준비중..</span>
+                    <span> 대시보드 </span>
+                </a>
+            </li>
+            <li class="side-nav-item">
+                <a href="{% url 'rebs:menu2_1' %}" class="side-nav-link">
+                    <i class="uil-schedule"></i>
+                    <span> 일정 관리 </span>
+                    <span class="badge badge-pill badge-light-lighten font-10 float-right">준비중..</span>
+                </a>
+            </li>
+
+            <li class="side-nav-title side-nav-item">프로젝트 관리</li>
+
+            {# 프로젝트 - 분양 계약 관련 #}
+            {% if request.user.is_superuser or request.user.staffauth.contract > '0' %}
+                <li class="side-nav-item">
+                    <a href="javascript: void(0);" class="side-nav-link">
+                        <i class="uil-file-contract-dollar"></i>
+                        <span> 분양 계약 관리 </span>
+                        <span class="menu-arrow"></span>
+                    </a>
+                    <ul class="side-nav-second-level" aria-expanded="false">
+                        <li>
+                            <a href="{% url 'rebs:contract:index' %}">계약 현황 조회
+                                <span class="badge badge-pill badge-success-lighten font-10 float-right">Ok</span>
+                            </a>
+                        </li>
+                        <li class="side-nav-item">
+                            <a href="javascript: void(0);" aria-expanded="false">
+                                계약 정보 관리
+                                <span class="menu-arrow"></span>
+                            </a>
+                            <ul class="side-nav-third-level" aria-expanded="false">
+                                <li>
+                                    <a href="{% url 'rebs:contract:register' %}">계약 등록 관리
+                                        <span class="badge badge-pill badge-success-lighten font-10 float-right">Ok</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="{% url 'rebs:contract:release' %}">계약 해지 관리
+                                        <span class="badge badge-pill badge-success-lighten font-10 float-right">Ok</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="{% url 'rebs:contract:dashboard' %}">동호수 현황표
+                                <span class="badge badge-pill badge-success-lighten font-10 float-right">Ok</span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+            {% endif %}
+
+            {# 프로젝트 - 분양 수납 관련 #}
+            {% if request.user.is_superuser or request.user.staffauth.payment > '0' %}
+                <li class="side-nav-item">
+                    <a href="javascript: void(0);" class="side-nav-link">
+                        <i class="uil-money-bill-stack"></i>
+                        <span> 분양 수납 관리 </span>
+                        <span class="menu-arrow"></span>
+                    </a>
+                    <ul class="side-nav-second-level" aria-expanded="false">
+                        <li>
+                            <a href="{% url 'rebs:cash-inout:payment-index' %}">분양 수납 내역
+                                <span class="badge badge-pill badge-success-lighten font-10 float-right">Ok</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{% url 'rebs:cash-inout:payment-register' %}">건별 수납 관리
+                                <span class="badge badge-pill badge-success-lighten font-10 float-right">Ok</span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+            {% endif %}
+
+            {# 프로젝트 - 고객 고지 관리 #}
+            {% if request.user.is_superuser or request.user.staffauth.notice > '0' %}
+                <li class="side-nav-item">
+                    <a href="javascript: void(0);" class="side-nav-link">
+                        <i class="uil-envelope-add"></i>
+                        <span> 고객 고지 관리 </span>
+                        <span class="menu-arrow"></span>
+                    </a>
+                    <ul class="side-nav-second-level" aria-expanded="false">
+                        <li>
+                            <a href="{% url 'rebs:notice:bill' %}">
+                                수납 고지서 발행
+                                <span class="badge badge-pill badge-success-lighten font-10 float-right">Ok</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                SMS 발송 관리
+                                <span class="badge badge-pill badge-light-lighten font-10 float-right">준비중..</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                MAIL 발송 관리
+                                <span class="badge badge-pill badge-light-lighten font-10 float-right">준비중..</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                우편 라벨 관리
+                                <span class="badge badge-pill badge-light-lighten font-10 float-right">준비중..</span>
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="#">발송 기록 관리
+                                <span class="badge badge-pill badge-light-lighten font-10 float-right">준비중..</span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+            {% endif %}
+
+            {# 프로젝트 - 자금 입출 관련 #}
+            {% if request.user.is_superuser or request.user.staffauth.project_cash > '0' %}
+                <li class="side-nav-item">
+                    <a href="javascript: void(0);" class="side-nav-link">
+                        <i class="uil-money-withdrawal"></i>
+                        <span> 현장 자금 관리 </span>
+                        <span class="menu-arrow"></span>
+                    </a>
+                    <ul class="side-nav-second-level" aria-expanded="false">
+                        <li>
+                            <a href="{% url 'rebs:cash-inout:project-report' %}">현장별 자금 현황
+                                <span class="badge badge-pill badge-success-lighten font-10 float-right">Ok</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{% url 'rebs:cash-inout:project-index' %}">현장 입출금 내역
+                                <span class="badge badge-pill badge-success-lighten font-10 float-right">Ok</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{% url 'rebs:cash-inout:project-create' %}">입출금 내역 등록
+                                <span class="badge badge-pill badge-success-lighten font-10 float-right">Ok</span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+            {% endif %}
+
+            {# 프로젝트 - 문서 기록 관련 #}
+            {% if request.user.is_superuser or request.user.staffauth.project_docs > '0' %}
+                <li class="side-nav-item">
+                    <a href="javascript: void(0);" class="side-nav-link">
+                        <i class="uil-document"></i>
+                        <span> 현장 문서 관리 </span>
+                        <span class="menu-arrow"></span>
+                    </a>
+                    <ul class="side-nav-second-level" aria-expanded="false">
+                        <li>
+                            <a href="#">[수신] 공문 관리
+                                <span class="badge badge-pill badge-light-lighten font-10 float-right">준비중..</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">[발신] 공문 관리
+                                <span class="badge badge-pill badge-light-lighten font-10 float-right">준비중..</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">내부 회의록 관리
+                                <span class="badge badge-pill badge-light-lighten font-10 float-right">준비중..</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">계약 / 협약서 관리
+                                <span class="badge badge-pill badge-light-lighten font-10 float-right">준비중..</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">소송 기록 관리
+                                <span class="badge badge-pill badge-light-lighten font-10 float-right">준비중..</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">내규 / 서식 관리
+                                <span class="badge badge-pill badge-light-lighten font-10 float-right">준비중..</span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+            {% endif %}
+
+            {# 프로젝트 - 신규 설정 관련 #}
+            {% if request.user.is_superuser or request.user.staffauth.project > '0' %}
+                <li class="side-nav-item">
+                    <a href="javascript: void(0);" class="side-nav-link">
+                        <i class="uil-map-marker-plus"></i>
+                        <span> 신규 프로젝트 </span>
+                        <span class="menu-arrow"></span>
+                    </a>
+                    <ul class="side-nav-second-level" aria-expanded="false">
+                        <li>
+                            <a href="{% url 'rebs:project:index' %}">프로젝트 관리
+                                <span class="badge badge-pill badge-success-lighten font-10 float-right">Ok</span>
+                            </a>
+                        </li>
+                        <li class="side-nav-item">
+                            <a href="javascript: void(0);" aria-expanded="false">
+                                세부 정보 관리
+                                <span class="menu-arrow"></span>
+                            </a>
+                            <ul class="side-nav-third-level" aria-expanded="false">
+                                <li>
+                                    <a href="{% url 'rebs:project:set-ordergroup' %}">차수 분류 등록
+                                        <span class="badge badge-pill badge-success-lighten font-10 float-right">Ok</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="{% url 'rebs:project:set-unit-type' %}">타입 정보 등록
+                                        <span class="badge badge-pill badge-success-lighten font-10 float-right">Ok</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="{% url 'rebs:project:set-floor-type' %}">층별 조건 등록
+                                        <span class="badge badge-pill badge-success-lighten font-10 float-right">Ok</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="{% url 'rebs:project:set-sales-price' %}">분양 가격 등록
+                                        <span class="badge badge-pill badge-success-lighten font-10 float-right">Ok</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="{% url 'rebs:project:set-payment-order' %}">납부 회차 등록
+                                        <span class="badge badge-pill badge-success-lighten font-10 float-right">Ok</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="{% url 'rebs:project:set-payment-amount' %}">납부 금액 등록
+                                        <span class="badge badge-pill badge-success-lighten font-10 float-right">Ok</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="side-nav-item">
+                            <a href="javascript: void(0);" aria-expanded="false">
+                                사업 부지 정보
+                                <span class="menu-arrow"></span>
+                            </a>
+                            <ul class="side-nav-third-level" aria-expanded="false">
+                                <li>
+                                    <a href="{% url 'rebs:project:site' %}">지번 별 토지관리
+                                        <span class="badge badge-pill badge-success-lighten font-10 float-right">Ok</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="{% url 'rebs:project:site-owner' %}">소유자별 토지관리
+                                        <span class="badge badge-pill badge-success-lighten font-10 float-right">Ok</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="{% url 'rebs:project:site-contract' %}">사업부지 매입관리
+                                        <span class="badge badge-pill badge-success-lighten font-10 float-right">Ok</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+            {% endif %}
+
+            <li class="side-nav-title side-nav-item">본사 관리</li>
+
+            {# 본사 - 자금 입출 관련 #}
+            {% if request.user.is_superuser or request.user.staffauth.company_cash > '0' %}
+                <li class="side-nav-item">
+                    <a href="javascript: void(0);" class="side-nav-link">
+                        <i class="uil-money-stack"></i>
+                        <span> 본사 회계 관리 </span>
+                        <span class="menu-arrow"></span>
+                    </a>
+                    <ul class="side-nav-second-level" aria-expanded="false">
+                        <li>
+                            <a href="{% url 'rebs:cash-inout:report' %}">일별 자금 현황
+                                <span class="badge badge-pill badge-success-lighten font-10 float-right">Ok</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{% url 'rebs:cash-inout:index' %}">입출금 내역 조회
+                                <span class="badge badge-pill badge-success-lighten font-10 float-right">Ok</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{% url 'rebs:cash-inout:create' %}">입출금 내역 등록
+                                <span class="badge badge-pill badge-success-lighten font-10 float-right">Ok</span>
+                            </a>
+                        </li>
+                        <li class="side-nav-item">
+                            <a href="javascript: void(0);" aria-expanded="false">
+                                관련 정보 관리
+                                <span class="menu-arrow"></span>
+                            </a>
+                            <ul class="side-nav-third-level" aria-expanded="false">
+                                <li>
+                                    <a href="#">은행 계좌 등록
+                                        <span class="badge badge-pill badge-light-lighten font-10 float-right">준비중..</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#">거래처 등록 관리
+                                        <span class="badge badge-pill badge-light-lighten font-10 float-right">준비중..</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+            {% endif %}
+
+            {# 본사 - 문서 기록 관련 #}
+            {% if request.user.is_superuser or request.user.staffauth.company_docs > '0' %}
+                <li class="side-nav-item">
+                    <a href="javascript: void(0);" class="side-nav-link">
+                        <i class="uil-file-plus-alt"></i>
+                        <span> 본사 문서 관리 </span>
+                        <span class="menu-arrow"></span>
+                    </a>
+                    <ul class="side-nav-second-level" aria-expanded="false">
+                        <li>
+                            <a href="#">[수신] 공문 관리
+                                <span class="badge badge-pill badge-light-lighten font-10 float-right">준비중..</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">[발신] 공문 관리
+                                <span class="badge badge-pill badge-light-lighten font-10 float-right">준비중..</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">내부 회의록 관리
+                                <span class="badge badge-pill badge-light-lighten font-10 float-right">준비중..</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">계약 / 협약서 관리
+                                <span class="badge badge-pill badge-light-lighten font-10 float-right">준비중..</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">소송 기록 관리
+                                <span class="badge badge-pill badge-light-lighten font-10 float-right">준비중..</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">내규 / 서식 관리
+                                <span class="badge badge-pill badge-light-lighten font-10 float-right">준비중..</span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+            {% endif %}
+
+            {# 본사 - 인사 관리 관련 #}
+            {% if request.user.is_superuser or request.user.staffauth.human_resource > '0' %}
+                <li class="side-nav-item">
+                    <a href="javascript: void(0);" class="side-nav-link">
+                        <i class="uil-users-alt"></i>
+                        <span> 본사 인사 관리 </span>
+                        <span class="menu-arrow"></span>
+                    </a>
+                    <ul class="side-nav-second-level" aria-expanded="false">
+                        <li>
+                            <a href="#">직원 정보 관리
+                                <span class="badge badge-pill badge-light-lighten font-10 float-right">준비중..</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">성과 정보 관리
+                                <span class="badge badge-pill badge-light-lighten font-10 float-right">준비중..</span>
+                            </a>
+                        </li>
+                        <li class="side-nav-item">
+                            <a href="javascript: void(0);" aria-expanded="false">
+                                관련 정보 관리
+                                <span class="menu-arrow"></span>
+                            </a>
+                            <ul class="side-nav-third-level" aria-expanded="false">
+                                <li>
+                                    <a href="#">부서 정보 관리
+                                        <span class="badge badge-pill badge-light-lighten font-10 float-right">준비중..</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#">직급 정보 관리
+                                        <span class="badge badge-pill badge-light-lighten font-10 float-right">준비중..</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+            {% endif %}
+
+            <li class="side-nav-title side-nav-item mt-1">기타 관리</li>
+
+            {# 본사 - 최상위 설정 관련 #}
+            {% if request.user.is_superuser or request.user.staffauth.company_settings > '0' %}
+                <li class="side-nav-item">
+                    <a href="javascript: void(0);" class="side-nav-link">
+                        <i class="uil-cog"></i>
+                        <span> 환경 설정 </span>
+                        <span class="menu-arrow"></span>
+                    </a>
+                    <ul class="side-nav-second-level" aria-expanded="false">
+                        <li>
+                            <a href="{% url 'rebs:company:index' %}">회사 정보 관리
+                                <span class="badge badge-pill badge-success-lighten font-10 float-right">Ok</span>
+                            </a>
+                        </li>
+                        {% if request.user.is_superuser or request.user.staffauth.auth_manage > '0' %}
+                            <li>
+                                <a href="#">권한 설정 관리
+                                    <span class="badge badge-pill badge-light-lighten font-10 float-right">준비중..</span>
+                                </a>
+                            </li>
+                        {% endif %}
+                    </ul>
+                </li>
+            {% endif %}
+        </ul>
+
+        <!-- Help Box -->
+        <!--        <div class="help-box text-white text-center">-->
+        <!--            <a href="javascript: void(0);" class="float-right close-btn text-white">-->
+        <!--                <i class="mdi mdi-close"></i>-->
+        <!--            </a>-->
+        <!--            <img src="/static/rebs/images/help-icon.svg" height="90" alt="Helper Icon Image"/>-->
+        <!--            <h5 class="mt-3">Unlimited Access</h5>-->
+        <!--            <p class="mb-3">Upgrade to plan to get access to unlimited reports</p>-->
+        <!--            <a href="javascript: void(0);" class="btn btn-outline-light btn-sm">Upgrade</a>-->
+        <!--        </div>-->
+        <!-- end Help Box -->
+        <!-- End Sidebar -->
+
+        <div class="clearfix"></div>
+    </div>
+    <!-- Sidebar -left -->
+</div>
+<!-- Left Sidebar End -->

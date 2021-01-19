@@ -1,0 +1,77 @@
+version: "3"
+
+services:
+  master:
+    image: dokube/mariadb:10.5
+    deploy:
+      replicas: 1
+      placement:
+        constraints: [node.role != manager]
+    environment:
+      MYSQL_ROOT_PASSWORD: secret
+      MYSQL_DATABASE: rebs
+      MYSQL_USER: rebs
+      MYSQL_PASSWORD: secret
+      MYSQL_MASTER: "true"
+  
+  slave:
+    image: dokube/mariadb:10.5
+    deploy:
+      replicas: 2
+      placement:
+        constraints: [node.role != manager]
+    depends_on:
+      - master
+    environment:
+      MYSQL_MASTER_HOST: master
+      MYSQL_ROOT_PASSWORD: secret
+      MYSQL_DATABASE: rebs
+      MYSQL_USER: rebs
+      MYSQL_PASSWORD: secret
+      MYSQL_REPL_USER: repl
+      MYSQL_REPL_PASSWORD: secret
+  
+  web:
+      image: dokube/drebs:latest
+      command: uwsgi --socket :8000 --module app.wsgi --py-autoreload 1 --logto /tmp/mylog.log
+      volumes:
+        - ../django:/django_project
+      volumes:
+      - type: bind
+        source: ../django
+        target: /django
+      environment:
+        DATABASE_NAME: rebs
+        DATABASE_USER: root
+        DATABASE_PASSWORD: secret
+        DISQUS_WEBSITE_SHORTNAME: django-rebs
+        DISQUS_API_KEY: oIwWLbRL7w8GBm0toiv3K7Dbus0mpYOVaosL88z6J7TDq6OJhEnH3Hjbc4nQXY
+        DISQUS_API_SECRET: cNOfxiHznIOulep6aAqHsJux1bO58V3dkZIcB4U14h8OGaFKoPSQzW8bFBsEhsnO
+        AWS_ACCESS_KEY_ID: AKIAW5AC7GJSURY5PC76
+        AWS_SECRET_ACCESS_KEY: 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
+        DJANGO_SETTINGS_MODULE: app.settings.local
+  
+  nginx:
+      image: dokube/nginx:latest
+      ports:
+        - "80:80"
+        - "443:443"
+      volumes:
+        - type: bind
+          source: ../nginx/ssl
+          target: /etc/letsencrypt/live
+        - type: bind
+          source: ../nginx/log
+          target: /var/log/letsencrypt
+        - type: bind
+          source: ../web/static
+          target: /static
+      environment:
+        SERVER_NAME: brdnc.co.kr
+        BACKEND_HOST: web:8000
+        WORKER_PROCESSES: 1
+        WORKER_CONNECTIONS: 1024
+        KEEPALIVE_TIMEOUT: 65
+        BACKEND_MAX_FAILS: 3
+        BACKEND_MAX_TIMEOUT: 10s
+        LOG_STDOUT: "true"

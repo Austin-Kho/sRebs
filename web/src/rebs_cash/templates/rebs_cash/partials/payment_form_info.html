@@ -1,0 +1,14 @@
+<div class="row pl-3 text-dark">
+                            {% if this_contract %}
+                                <h5 class="m-0 {% if not this_contract.activation %}text-danger{% endif %}">
+                                    <i class="mdi mdi-star text-info mdi-18px"></i>
+                                    [일련번호 : {{ this_contract.serial_number }}] (타입
+                                    : {{ this_contract.contractunit.unit_type }}
+                                    <i class="mdi mdi-square"
+                                       style="color: {{ this_contract.contractunit.unit_type.color }};"></i>
+                                    {% if this_project.is_unit_set %}{{ this_contract.contractunit.unitnumber }}{% endif %} |
+                                    {% if not this_contract.activation %}해지{% endif %}
+                                    계약자 : {{ this_contract.contractor.name }})
+                                </h5>
+                            {% endif %}
+                        </div>
