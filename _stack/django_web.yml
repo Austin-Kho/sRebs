@@ -16,7 +16,7 @@ services:
     networks:
       - drebs
   
-  slave:
+  slav:
     image: dokube/mariadb:10.5
     deploy:
       replicas: 2
@@ -41,7 +41,7 @@ services:
       volumes:
       - type: bind
         source: ../django
-        target: /app
+        target: /django
       environment:
         DATABASE_NAME: rebs
         DATABASE_USER: rebs
