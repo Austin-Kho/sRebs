@@ -13,6 +13,8 @@ services:
       MYSQL_USER: rebs
       MYSQL_PASSWORD: secret
       MYSQL_MASTER: "true"
+    networks:
+      - drebs
   
   slave:
     image: dokube/mariadb:10.5
@@ -30,6 +32,8 @@ services:
       MYSQL_PASSWORD: secret
       MYSQL_REPL_USER: repl
       MYSQL_REPL_PASSWORD: secret
+    networks:
+      - drebs
   
   web:
       image: dokube/drebs:latest
@@ -50,6 +54,8 @@ services:
         AWS_ACCESS_KEY_ID: AKIAW5AC7GJSURY5PC76
         AWS_SECRET_ACCESS_KEY: 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
         DJANGO_SETTINGS_MODULE: app.settings.local
+      networks:
+      - drebs
   
   nginx:
       image: dokube/nginx:latest
@@ -75,3 +81,9 @@ services:
         BACKEND_MAX_FAILS: 3
         BACKEND_MAX_TIMEOUT: 10s
         LOG_STDOUT: "true"
+      networks:
+      - drebs
+
+networks:
+  drebs:
+    external: true
