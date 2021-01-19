@@ -39,14 +39,12 @@ services:
       image: dokube/drebs:latest
       command: uwsgi --socket :8000 --module app.wsgi --py-autoreload 1 --logto /tmp/mylog.log
       volumes:
-        - ../django:/django_project
-      volumes:
       - type: bind
         source: ../django
         target: /app
       environment:
         DATABASE_NAME: rebs
-        DATABASE_USER: root
+        DATABASE_USER: rebs
         DATABASE_PASSWORD: secret
         DISQUS_WEBSITE_SHORTNAME: django-rebs
         DISQUS_API_KEY: oIwWLbRL7w8GBm0toiv3K7Dbus0mpYOVaosL88z6J7TDq6OJhEnH3Hjbc4nQXY
