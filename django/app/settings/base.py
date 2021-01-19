@@ -114,10 +114,39 @@ DATABASES = {
         'USER': get_environment('DATABASE_USER'),
         'PASSWORD': get_environment('DATABASE_PASSWORD'),
         "DEFAULT-CHARACTER-SET": 'utf8',
-        'HOST': 'db',
+        'HOST': 'master',
+        'PORT': 3306,
+    },
+    'master': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': get_environment('DATABASE_NAME'),
+        'USER': get_environment('DATABASE_USER'),
+        'PASSWORD': get_environment('DATABASE_PASSWORD'),
+        "DEFAULT-CHARACTER-SET": 'utf8',
+        'HOST': 'master',
+        'PORT': 3306,
+    },
+    'slave1': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': get_environment('DATABASE_NAME'),
+        'USER': get_environment('DATABASE_USER'),
+        'PASSWORD': get_environment('DATABASE_PASSWORD'),
+        "DEFAULT-CHARACTER-SET": 'utf8',
+        'HOST': 'slave',
+        'PORT': 3306,
+    },
+    'slave2': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': get_environment('DATABASE_NAME'),
+        'USER': get_environment('DATABASE_USER'),
+        'PASSWORD': get_environment('DATABASE_PASSWORD'),
+        "DEFAULT-CHARACTER-SET": 'utf8',
+        'HOST': 'slave',
         'PORT': 3306,
     }
 }
+
+# DATABASE_ROUTERS = ['app.routers.MasterSlaveRouter']
 
 AUTH_USER_MODEL = 'account.User'
 
