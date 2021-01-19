@@ -62,12 +62,6 @@ services:
         - "443:443"
       volumes:
         - type: bind
-          source: ../nginx/ssl
-          target: /etc/letsencrypt/live
-        - type: bind
-          source: ../nginx/log
-          target: /var/log/letsencrypt
-        - type: bind
           source: ../django/static
           target: /static
       environment:
