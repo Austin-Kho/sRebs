@@ -39,7 +39,7 @@ services:
       volumes:
       - type: bind
         source: ../django
-        target: /django
+        target: /app
       environment:
         DATABASE_NAME: rebs
         DATABASE_USER: root
@@ -64,7 +64,7 @@ services:
           source: ../nginx/log
           target: /var/log/letsencrypt
         - type: bind
-          source: ../web/static
+          source: ../django/static
           target: /static
       environment:
         SERVER_NAME: brdnc.co.kr
