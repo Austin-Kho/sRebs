@@ -37,6 +37,9 @@ services:
   
   web:
       image: dokube/drebs:latest
+      deploy:
+        placement:
+          constraints: [node.role == manager]
       command: uwsgi --socket :8000 --module app.wsgi --py-autoreload 1 --logto /tmp/mylog.log
       volumes:
       - type: bind
@@ -57,6 +60,9 @@ services:
   
   nginx:
       image: dokube/nginx:latest
+      deploy:
+        placement:
+          constraints: [node.role == manager]
       ports:
         - "80:80"
         - "443:443"
